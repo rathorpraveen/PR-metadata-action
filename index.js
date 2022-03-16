@@ -11,7 +11,7 @@ const main = async () => {
     const repo = core.getInput('repo', { required: true });
     const pr_number = core.getInput('pr_number', { required: true });
     const token = core.getInput('token', { required: true });
-
+Console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"+owner);
     /**
      * Now we need to create an instance of Octokit which will use to call
      * GitHub's REST API endpoints.
