@@ -13,6 +13,27 @@ inputs:
   token:
     description: 'The token to use to access the GitHub API'
     required: true
+  serverUrl:
+    description: 'OTS URL'
+    required: true
+  offlineToken:
+    description: 'OTS OfflineToken'
+    required: true
+  teamspace:
+    description: 'OTS Teamspace'
+    required: true
+  project:
+    description: 'OTS Project'
+    required: true
+  branch:
+    description: 'OTS branch'
+    required: true
+  repository:
+    description: 'OTS repository'
+    required: true
+  filepath:
+    description: 'OTS FilePath'
+    required: true
 runs:
   using: 'node16'
   main: 'index.js'
