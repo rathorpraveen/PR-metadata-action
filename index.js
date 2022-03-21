@@ -34,7 +34,7 @@ const main = async () => {
     console.log("@@@@@@@@@@@@@@@@@@@ branch "+branch);
     console.log("@@@@@@@@@@@@@@@@@@@ repository "+repository);
     console.log("@@@@@@@@@@@@@@@@@@@ filepath "+filepath);
-    console.log("@@@@@@@@@@@@@@@@@@@ environment "+environment);
+    
     
     await serverSSLCheck(serverStore);
 
