@@ -36,7 +36,7 @@ const main = async () => {
     console.log("@@@@@@@@@@@@@@@@@@@ filepath "+filepath);
     
     
-    await serverSSLCheck(serverStore);
+    await serverSSLCheck(serverUrl);
 
     await teamspaceIdGenByName(serverUrl, teamspace, offlineToken);
 
