@@ -419,21 +419,21 @@ function serverSSLCheck(serverUrl) {
       } else if (error.code == "UNABLE_TO_VERIFY_LEAF_SIGNATURE") {
         throw new Error(
           "Could not establish secure connection to the server " +
-            serverStore.getServer() +
+          serverUrl +
             ". Please validate the SSL certificate of the server or import the CA certificate of the server to your trust store. Error: " +
             error.message
         );
       } else if (error.code == "CERT_HAS_EXPIRED") {
         throw new Error(
           "Could not establish secure connection to the server " +
-            serverStore.getServer() +
+          serverUrl +
             ". The server presented an expired SSL certificate. Error: " +
             error.message
         );
       } else {
         throw new Error(
           "Could not establish secure connection to the server " +
-            serverStore.getServer() +
+          serverUrl +
             ". Error: " +
             error.message
         );
