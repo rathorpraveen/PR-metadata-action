@@ -5,7 +5,7 @@ on: workflow_dispatch
 jobs:
 
   annotate-pr:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     name: Annotates pull request with metadata
     steps:
       - name: Annotate PR
