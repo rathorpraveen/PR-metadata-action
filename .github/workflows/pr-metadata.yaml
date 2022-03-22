@@ -19,7 +19,7 @@ jobs:
           offlineToken: eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI0ZDM1NTE5NC01NjAzLTRjNWEtYjU2ZS01MWU1ZGQ4YmY0Y2UifQ.eyJpYXQiOjE2NDc4OTMzODAsImp0aSI6ImIwNTE3MzMxLTNhMDItNDhiZS05NDMxLWQ3NGZjOGIxMWMyNiIsImlzcyI6Imh0dHBzOi8vMTAuMTM0LjU5LjIzNi5uaXAuaW8vYXV0aC9yZWFsbXMvdGVzdHNlcnZlciIsImF1ZCI6Imh0dHBzOi8vMTAuMTM0LjU5LjIzNi5uaXAuaW8vYXV0aC9yZWFsbXMvdGVzdHNlcnZlciIsInN1YiI6IjhkMTkyNGRmLTZmMTItNGI2Mi05ODFiLWE5MzZlZDVjMzQ3MSIsInR5cCI6Ik9mZmxpbmUiLCJhenAiOiJ0ZXN0c2VydmVyIiwic2Vzc2lvbl9zdGF0ZSI6ImRiYzE3NzY3LTBiYjgtNGZmOS1hNWE1LTdkNDVlNWU0YTY5ZCIsInNjb3BlIjoidGVzdHNlcnZlciBlbWFpbCBvZmZsaW5lX2FjY2VzcyBwcm9maWxlIn0.hH4fAMxgoYtrCsBIUzYHgny4m51YWCh-X-cIvyaf8iQ
           teamspace: Initial Team Space
           project: Swadesh_SVT
-          branch: master
+          branch: Swadesh_Common_FTProject
           repository: https://github01.hclpnp.com/testingproducts/FT_SVT_TestAsset.git
-          filepath: MultipleTest/Tests/actiTime.testsuite
+          filepath: UIPrjMultiDataset1023/Tests/googleTest1023.testsuite
           
