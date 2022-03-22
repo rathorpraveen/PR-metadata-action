@@ -20,10 +20,6 @@ const main = async () => {
      * We need to fetch all the inputs that were provided to our action
      * and store them in variables for us to use.
      **/
-    const owner = core.getInput('owner', { required: true });
-    const repo = core.getInput('repo', { required: true });
-    const pr_number = core.getInput('pr_number', { required: true });
-    const token = core.getInput('token', { required: true });
     const serverUrl = core.getInput('serverUrl',{required: true});
     const offlineToken = core.getInput('offlineToken',{required: true});
     const teamspace = core.getInput('teamspace',{required: true});
@@ -32,12 +28,6 @@ const main = async () => {
     const repository  = core.getInput('repository',{required: true});
     const filepath  = core.getInput('filepath',{required: true});
 
-    console.log("@@@@@@@@@@@@@@@@@@@ teamspace "+teamspace);
-    console.log("@@@@@@@@@@@@@@@@@@@ project "+project);
-    console.log("@@@@@@@@@@@@@@@@@@@ branch "+branch);
-    console.log("@@@@@@@@@@@@@@@@@@@ repository "+repository);
-    console.log("@@@@@@@@@@@@@@@@@@@ filepath "+filepath);
-    
     
     await serverSSLCheck(serverUrl);
 
@@ -145,7 +135,6 @@ async function getResults(serverUrl, offlineToken) {
 
 
 async function getJobStatus(serverUrl, offlineToken) {
-  console.log("############################# inside get job status");
   var jobStatusURL =
   serverUrl +
     "rest/projects/" +
@@ -175,11 +164,11 @@ async function getJobStatus(serverUrl, offlineToken) {
       }
       var parsedJSON = response.data;
       status = parsedJSON.status;
-      console.log("############################# inside get job status status is "+status);
+      
       if (exeStatus != status) {
         exeStatus = status;
         console.log(
-          getDateTime() + " Test Execution Status: " + exeStatus
+          " Test Execution Status: " + exeStatus
         );
       }
     })
@@ -198,7 +187,7 @@ async function pollJobStatus(serverUrl, offlineToken) {
     var timerId = setInterval(async function () {
       try {
         await getJobStatus(serverUrl, offlineToken);
-	      console.log("KKKKKKKKKKKKKKexeStatusKKKKKKKKKKKKKKKKK = "+exeStatus);
+	      
         if (
           exeStatus == 'COMPLETE' ||
           exeStatus == 'COMPLETE_WITH_ERROR' ||
@@ -245,7 +234,7 @@ async function startJobExecution(serverUrl,branch,offlineToken) {
     Authorization: "Bearer " + accessToken,
   };
   var body = JSON.stringify(AssetParameters);
-  console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& request body = "+body);
+  console.log("request body = "+body);
   return axios
     .post(jobExecURL, body, { headers: headers })
     .then((response) => {
@@ -263,9 +252,6 @@ async function startJobExecution(serverUrl,branch,offlineToken) {
       exeId = parsedJSON.id;
       resultId = parsedJSON.result.id;
       exeStatus = parsedJSON.status;
-      console.log("@@@@@@@@@@@@@parsedJSON.id@@@@@@@@@@@@@@@@ "+parsedJSON.id);
-      console.log("@@@@@@@@@@@@@@@@@@@@"+parsedJSON.result.id);
-      console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@ status is ="+parsedJSON.status);
       return true;
     })
     .catch((error) => {
