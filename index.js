@@ -145,6 +145,7 @@ async function getResults(serverUrl, offlineToken) {
 
 
 async function getJobStatus(serverUrl, offlineToken) {
+  console.log("############################# inside get job status");
   var jobStatusURL =
   serverUrl +
     "rest/projects/" +
@@ -174,6 +175,7 @@ async function getJobStatus(serverUrl, offlineToken) {
       }
       var parsedJSON = response.data;
       status = parsedJSON.status;
+      console.log("############################# inside get job status status is "+status);
       if (exeStatus != status) {
         exeStatus = status;
         console.log(
@@ -196,7 +198,7 @@ async function pollJobStatus(serverUrl, offlineToken) {
     var timerId = setInterval(async function () {
       try {
         await getJobStatus(serverUrl, offlineToken);
-	
+	      console.log("KKKKKKKKKKKKKKexeStatusKKKKKKKKKKKKKKKKK = "+exeStatus);
         if (
           exeStatus != 'COMPLETE' ||
           exeStatus != 'COMPLETE_WITH_ERROR' ||
