@@ -1,18 +1,6 @@
-name: 'PR Metadata Action'
-description: 'Adds pull request file changes as a comment to a newly opened PR'
+name: 'HCL OneTest Server Action'
+description: 'Execute OneTest Test'
 inputs:
-  owner:
-    description: 'The owner of the repository'
-    required: true
-  repo:
-    description: 'The name of the repository'
-    required: true
-  pr_number:
-    description: 'The number of the pull request'
-    required: true
-  token:
-    description: 'The token to use to access the GitHub API'
-    required: true
   serverUrl:
     description: 'OTS URL'
     required: true
