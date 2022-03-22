@@ -199,13 +199,13 @@ async function pollJobStatus(serverUrl, offlineToken) {
         await getJobStatus(serverUrl, offlineToken);
 	      console.log("KKKKKKKKKKKKKKexeStatusKKKKKKKKKKKKKKKKK = "+exeStatus);
         if (
-          exeStatus != 'COMPLETE' ||
-          exeStatus != 'COMPLETE_WITH_ERROR' ||
-          exeStatus != 'STOPPED_BY_USER' ||
-          exeStatus != 'STOPPED_AUTOMATICALLY' ||
-          exeStatus != 'INCOMPLETE' ||
-          exeStatus != 'CANCELED' ||
-          exeStatus != 'LAUNCH_FAILED'
+          exeStatus == 'COMPLETE' ||
+          exeStatus == 'COMPLETE_WITH_ERROR' ||
+          exeStatus == 'STOPPED_BY_USER' ||
+          exeStatus == 'STOPPED_AUTOMATICALLY' ||
+          exeStatus == 'INCOMPLETE' ||
+          exeStatus == 'CANCELED' ||
+          exeStatus == 'LAUNCH_FAILED'
         ){
           // stop polling on end state
           clearInterval(timerId);
