@@ -194,6 +194,7 @@ async function getJobStatus(serverUrl, offlineToken) {
 }
 
 async function pollJobStatus(serverUrl, offlineToken) {
+  return new Promise((resolve, reject) => {
     var timerId = setInterval(async function () {
       try {
         await getJobStatus(serverUrl, offlineToken);
@@ -209,15 +210,16 @@ async function pollJobStatus(serverUrl, offlineToken) {
         ){
           // stop polling on end state
           clearInterval(timerId);
-          
+          resolve(true);
         }
         // continue polling...
       } catch (error) {
         // stop polling on any error
         clearInterval(timerId);
-        
+        reject(error);
       }
     }, 11000);
+  });
 }
 
 
