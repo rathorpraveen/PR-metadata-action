@@ -4,7 +4,7 @@ on: workflow_dispatch
 
 jobs:
 
-  annotate-pr:
+  execute-test:
     runs-on: self-hosted
     name: HCL OneTest Server Action
     steps:
