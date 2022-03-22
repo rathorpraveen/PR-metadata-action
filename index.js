@@ -11,6 +11,9 @@ var repoId;
 var assetId;
 var externalType;
 var dektopProjId;
+var exeId;
+var resultId;
+var exeStatus;
 const main = async () => {
   try {
     /**
@@ -49,10 +52,174 @@ const main = async () => {
     await AssetIdGenByName(serverUrl,filepath,branch,repository,project,offlineToken);
 
     await startJobExecution(serverUrl,branch,offlineToken);
+
+    if (
+      exeStatus != 'COMPLETE' ||
+      exeStatus != 'COMPLETE_WITH_ERROR' ||
+      exeStatus != 'STOPPED_BY_USER' ||
+      exeStatus != 'STOPPED_AUTOMATICALLY' ||
+      exeStatus != 'INCOMPLETE' ||
+      exeStatus != 'CANCELED' ||
+      exeStatus != 'LAUNCH_FAILED'
+    )
+    {
+
+      await pollJobStatus(serverUrl, offlineToken);
+    }
+
+     await getResults(serverUrl, offlineToken);
   } catch (error) {
     core.setFailed(error.message);
   }
 }
+
+async function getResults(serverUrl, offlineToken) {
+  var resultsURL =
+  serverUrl +
+    "rest/projects/" +
+    projectId +
+    "/results/" +
+    resultId;
+
+  await accessTokenGen(serverUrl, offlineToken);
+
+  var headers = {
+    "Accept-Language": "en",
+    Authorization: "Bearer " + accessToken,
+  };
+  return axios
+    .get(resultsURL, { headers: headers })
+    .then((response) => {
+      if (response.status != 200) {
+        throw new Error(
+          "Error during retrieval of results. " +
+            resultsURL +
+            " returned " +
+            response.status +
+            " response code. Response: " +
+            response.data
+        );
+      }
+      var parsedJSON = response.data;
+      var verdict = parsedJSON.verdict;
+      console.log("");
+      console.log("Test Result = " + verdict);
+      if (verdict == "ERROR" || verdict == "FAIL") {
+        
+        var message = parsedJSON.message;
+        console.log("");
+        console.log("Error Message = " + message);
+      } else {
+        console.log("failed");
+      }
+      console.log("");
+      if (
+        exeStatus != 'CANCELED' &&
+        exeStatus != 'LAUNCH_FAILED'
+      ) {
+        var total = parsedJSON.reports.length;
+
+        if (total > 0) {
+          console.log("Reports information:");
+          for (var i = 0; i < total; i++) {
+            let reportName = parsedJSON.reports[i].name;
+            let reporthref = parsedJSON.reports[i].href;
+            console.log(
+              reportName +
+                " : " +
+                url.resolve(serverUrl, reporthref)
+            );
+          }
+        } else {
+          console.log("Reports unavailable.");
+        }
+      }
+      return true;
+    })
+    .catch((error) => {
+      throw new Error(
+        "Error when accessing results URL - " + resultsURL + ". Error: " + error
+      );
+    });
+}
+
+
+async function getJobStatus(serverUrl, offlineToken) {
+  var jobStatusURL =
+  serverUrl +
+    "rest/projects/" +
+    projectId +
+    "/executions/" +
+    exeId;
+
+  await accessTokenGen(serverUrl,offlineToken);
+
+  var headers = {
+    "Accept-Language": "en",
+    Authorization: "Bearer " + accessToken,
+  };
+  var status;
+  return axios
+    .get(jobStatusURL, { headers: headers })
+    .then((response) => {
+      if (response.status != 200) {
+        throw new Error(
+          "Error during retrieval of test execution status. " +
+            jobStatusURL +
+            " returned " +
+            response.status +
+            " response code. Response: " +
+            response.data
+        );
+      }
+      var parsedJSON = response.data;
+      status = parsedJSON.status;
+      if (exeStatus != status) {
+        exeStatus = status;
+        console.log(
+          getDateTime() + " Test Execution Status: " + exeStatus
+        );
+      }
+    })
+    .catch((error) => {
+      throw new Error(
+        "Error when accessing test execution status URL - " +
+          jobStatusURL +
+          ". Error: " +
+          error
+      );
+    });
+}
+
+async function pollJobStatus(serverUrl, offlineToken) {
+  return new Promise((resolve, reject) => {
+    var timerId = setInterval(async function () {
+      try {
+        await getJobStatus(serverUrl, offlineToken);
+	
+        if (
+          exeStatus != 'COMPLETE' ||
+          exeStatus != 'COMPLETE_WITH_ERROR' ||
+          exeStatus != 'STOPPED_BY_USER' ||
+          exeStatus != 'STOPPED_AUTOMATICALLY' ||
+          exeStatus != 'INCOMPLETE' ||
+          exeStatus != 'CANCELED' ||
+          exeStatus != 'LAUNCH_FAILED'
+        ){
+          // stop polling on end state
+          clearInterval(timerId);
+          resolve(true);
+        }
+        // continue polling...
+      } catch (error) {
+        // stop polling on any error
+        clearInterval(timerId);
+        reject(error);
+      }
+    }, 11000);
+  });
+}
+
 
 async function startJobExecution(serverUrl,branch,offlineToken) {
   let jobExecURL =
@@ -91,6 +258,9 @@ async function startJobExecution(serverUrl,branch,offlineToken) {
         );
       }
       var parsedJSON = response.data;
+      exeId = parsedJSON.id;
+      resultId = parsedJSON.result.id;
+      exeStatus = parsedJSON.status;
       console.log("@@@@@@@@@@@@@parsedJSON.id@@@@@@@@@@@@@@@@ "+parsedJSON.id);
       console.log("@@@@@@@@@@@@@@@@@@@@"+parsedJSON.result.id);
       console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@ status is ="+parsedJSON.status);
