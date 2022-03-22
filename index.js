@@ -179,7 +179,7 @@ async function getJobStatus(serverUrl, offlineToken) {
       if (exeStatus != status) {
         exeStatus = status;
         console.log(
-          getDateTime() + " Test Execution Status: " + exeStatus
+           " Test Execution Status: " + exeStatus
         );
       }
     })
